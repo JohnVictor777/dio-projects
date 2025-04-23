@@ -1,0 +1,14 @@
+{
+  "apim-request-id": "e44749ad-8b75-4363-85f6-fecd7b39635b",
+  "content-length": "169",
+  "content-type": "application/json; charset=utf-8",
+  "modelVersion": "2023-10-01",
+  "captionResult": {
+    "text": "a group of people walking on a brick road",
+    "confidence": 0.7907837629318237
+  },
+  "metadata": {
+    "width": 1280,
+    "height": 853
+  }
+}
