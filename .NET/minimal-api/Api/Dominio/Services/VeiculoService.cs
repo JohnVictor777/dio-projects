@@ -12,11 +12,12 @@ namespace minimal_api.Dominio.Services
     public class VeiculoService : IVeiculoService
     {
         private readonly MinimalApiDbContext _context;
+        // Construtor que recebe o DbContext via injeção de dependência
         public VeiculoService(MinimalApiDbContext context)
         {
             _context = context;
         }
-
+        // Atualiza um veículo existente no banco de dados
         public void Alterar(Veiculo veiculo)
         {
             _context.Veiculos.Update(veiculo);
@@ -39,19 +40,24 @@ namespace minimal_api.Dominio.Services
             _context.Veiculos.Add(veiculo);
             _context.SaveChanges();
         }
-
-        public List<Veiculo> Todos(int pagina = 1, string? nome = null, string? marca = null)
+        // Retorna uma lista de veículos, com opções de paginação e filtro por nome/marca
+        public List<Veiculo> Todos(int? pagina = 1, string? nome = null, string? marca = null)
         {
+
             var query = _context.Veiculos.AsQueryable();
+            // Aplica filtro por nome se fornecido (case-insensitive e busca parcial)
             if (!string.IsNullOrEmpty(nome))
             {
                 query = query.Where(v => EF.Functions.Like(v.Nome.ToLower(), $"%{nome.ToLower()}%"));
             }
 
             int itensPorPagina = 10;
-            query = query.Skip((pagina - 1) * itensPorPagina)
-                         .Take(itensPorPagina)
-                         .OrderBy(v => v.Nome);
+            // Aplica paginação e ordenação se um número de página for fornecido.
+            if (pagina != null)
+                query = query.Skip(((int)pagina - 1) * itensPorPagina)
+                             .Take(itensPorPagina)
+                             .OrderBy(v => v.Nome);
+
 
             return query.ToList();
         }
